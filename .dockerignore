@@ -1,0 +1,467 @@
+# =============================================================================
+# Git
+# =============================================================================
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+.github/
+.gitlab/
+.gitlab-ci.yml
+
+
+# =============================================================================
+# Python cache and compiled files
+# =============================================================================
+__pycache__/
+**/__pycache__/
+
+*.py[cod]
+*$py.class
+*.pyd
+*.so
+
+.python-version
+.python_history
+
+
+# =============================================================================
+# Virtual environments
+# =============================================================================
+.venv/
+venv/
+env/
+ENV/
+
+**/.venv/
+**/venv/
+**/env/
+
+
+# =============================================================================
+# Environment variables and secrets
+# =============================================================================
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
+
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.template
+!**/.env.sample
+
+.envrc
+.direnv/
+
+secrets/
+private/
+
+*.secret
+*.secrets
+
+*.pem
+*.key
+*.p12
+*.pfx
+
+# При необходимости публичные сертификаты можно включить:
+# !certs/public.crt
+
+
+# =============================================================================
+# IDEs and editors
+# =============================================================================
+# JetBrains: PyCharm / IntelliJ IDEA
+.idea/
+**/.idea/
+
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+**/.vscode/
+
+*.code-workspace
+
+# Vim
+*.swp
+*.swo
+*.swn
+Session.vim
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+
+# =============================================================================
+# Testing and coverage
+# =============================================================================
+.pytest_cache/
+**/.pytest_cache/
+
+.coverage
+.coverage.*
+coverage.xml
+coverage.json
+htmlcov/
+
+test-results/
+reports/
+junit.xml
+
+.tox/
+.nox/
+.hypothesis/
+
+.mutmut-cache/
+cosmic-ray.sqlite
+
+
+# =============================================================================
+# Linters, formatters and type checkers
+# =============================================================================
+.mypy_cache/
+**/.mypy_cache/
+
+.ruff_cache/
+**/.ruff_cache/
+
+.pyright/
+.pyre/
+.pytype/
+
+.dmypy.json
+dmypy.json
+
+.scannerwork/
+.sonar/
+
+
+# =============================================================================
+# Build and packaging artifacts
+# =============================================================================
+build/
+dist/
+downloads/
+
+*.egg
+*.egg-info/
+.eggs/
+
+pip-wheel-metadata/
+wheels/
+
+MANIFEST
+
+# Не игнорировать файлы зависимостей:
+!requirements.txt
+!requirements-*.txt
+!pyproject.toml
+!poetry.lock
+!uv.lock
+!Pipfile
+!Pipfile.lock
+!pdm.lock
+
+
+# =============================================================================
+# Django
+# =============================================================================
+# Локальные настройки
+settings_local.py
+local_settings.py
+**/settings/local.py
+
+# Загруженные пользователями файлы
+media/
+uploads/
+
+# Результат collectstatic.
+# Оставьте игнорирование, если collectstatic запускается внутри Dockerfile.
+staticfiles/
+collected_static/
+
+# Локальная SQLite
+db.sqlite3
+*.sqlite3
+*.sqlite3-journal
+
+# Django cache
+django_cache/
+
+
+# =============================================================================
+# FastAPI / ASGI
+# =============================================================================
+# Локально сгенерированная OpenAPI-схема
+openapi.json
+openapi.yaml
+openapi.yml
+
+# Runtime-файлы
+*.pid
+*.sock
+
+gunicorn.conf.local.py
+uvicorn.conf.local.py
+
+
+# =============================================================================
+# Database dumps and local data
+# =============================================================================
+*.sql
+*.dump
+*.backup
+
+postgres_data/
+pgdata/
+.postgres/
+
+mysql_data/
+mariadb_data/
+
+redis_data/
+mongo_data/
+
+dump.rdb
+appendonly.aof
+
+
+# =============================================================================
+# Celery and task queues
+# =============================================================================
+celerybeat-schedule
+celerybeat.pid
+celeryd.pid
+
+*.celerybeat-schedule
+
+celery-results/
+flower.db
+
+rabbitmq_data/
+
+
+# =============================================================================
+# Logs and temporary files
+# =============================================================================
+logs/
+log/
+
+*.log
+*.log.*
+
+tmp/
+temp/
+.cache/
+
+run/
+runtime/
+
+*.pid
+*.pid.lock
+*.seed
+
+
+# =============================================================================
+# Docker local files
+# =============================================================================
+Dockerfile*
+docker-compose*.yml
+docker-compose*.yaml
+compose*.yml
+compose*.yaml
+
+.docker/
+docker-data/
+
+# Не отправляем Docker-конфигурацию внутрь контекста,
+# если она не копируется явно в Dockerfile.
+docker/**/*.env
+
+# При необходимости оставьте примеры конфигурации:
+!docker/**/.env.example
+!docker/**/.env.template
+
+
+# =============================================================================
+# Kubernetes, Helm and infrastructure
+# =============================================================================
+.kube/
+kubeconfig
+kubeconfig.*
+
+values.local.yaml
+values.local.yml
+values.secret.yaml
+values.secret.yml
+
+*.tgz
+
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+
+crash.log
+crash.*.log
+
+
+# =============================================================================
+# Documentation
+# =============================================================================
+docs/_build/
+site/
+doctrees/
+
+# Уберите эту строку, если документация собирается внутри Docker-образа
+docs/
+
+
+# =============================================================================
+# Jupyter
+# =============================================================================
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+.jupyter/
+
+*.ipynb
+
+
+# =============================================================================
+# Frontend / Node.js
+# =============================================================================
+node_modules/
+**/node_modules/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.npm/
+.pnpm-store/
+
+.yarn/cache/
+.yarn/unplugged/
+
+.next/
+.nuxt/
+.svelte-kit/
+.vite/
+
+frontend/dist/
+frontend/build/
+frontend/.next/
+frontend/.nuxt/
+frontend/.svelte-kit/
+
+*.tsbuildinfo
+
+
+# =============================================================================
+# API clients and local development tools
+# =============================================================================
+.postman/
+.insomnia/
+.httpie/
+
+bruno/.env
+bruno/environments/local.bru
+bruno/environments/private.bru
+
+
+# =============================================================================
+# Monitoring and local service data
+# =============================================================================
+prometheus_data/
+grafana_data/
+minio_data/
+elasticsearch_data/
+
+
+# =============================================================================
+# Operating system files
+# =============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+
+# =============================================================================
+# Backups and generated files
+# =============================================================================
+*.bak
+*.old
+*.orig
+*.rej
+
+backup/
+backups/
+
+generated/
+artifacts/
+exports/
+
+scratch/
+storage/tmp/
+
+*.prof
+*.lprof
+profile-results/
+
+
+# =============================================================================
+# Project files not needed in production image
+# =============================================================================
+#README.md
+#README.*
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+
+LICENSE
+LICENSE.*
+
+Makefile
+
+# Bruno / Postman collections
+bruno/
+postman/
+
+# Local scripts and examples
+examples/
+samples/
