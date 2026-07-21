@@ -16,6 +16,15 @@ class Settings(BaseSettings):
     redis_host: str = 'redis'
     redis_port: int = 6379
 
+    @property
+    def database_url(self):
+        """
+        Async-подключение к Postgres
+        """
+        return (f'postgresql+asyncpg://{self.postgres_user}:'
+                f'{self.postgres_password}@{self.postgres_host}:'
+                f'{self.postgres_port}/{self.postgres_db}')
+
     model_config = SettingsConfigDict(env_file='.env',
                                       env_file_encoding='utf-8',
                                       extra='ignore')
