@@ -1,10 +1,9 @@
 from datetime import datetime
-from enum import StrEnum, Enum
+from enum import StrEnum
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
-from sqlalchemy.engine import default
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
