@@ -1,0 +1,19 @@
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.db.session import get_db
+from app.schemas.analyzer import AnalyzeRequest, AnalyzeResponse
+from app.services.analyzer_service import AnalyzerService
+
+
+router = APIRouter(prefix='/analyze', tags=['analyze'])
+
+@router.post('', response_model=AnalyzeResponse, status_code=status.HTTP_201_CREATED)
+async def create_analysis_task(payload: AnalyzeRequest,
+                               db: AsyncSession = Depends(get_db)) -> AnalyzeResponse:
+    """
+    Запрос на создание задачи анализа URLs.
+    """
+    service = AnalyzerService(db)
+    task = await service.create_task(payload.urls)
+    return AnalyzeResponse(task_id=task.id, status=task.status,
+                           total_urls=task.total_urls, processed_urls=task.processed_urls)
