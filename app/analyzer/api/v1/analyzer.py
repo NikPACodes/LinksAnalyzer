@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
-from app.schemas.analyzer import AnalyzeRequest, AnalyzeResponse
-from app.services.analyzer_service import AnalyzerService
+from app.analyzer.schemas.analyzer import AnalyzeRequest, AnalyzeResponse
+from app.analyzer.services.analyzer_service import AnalyzerService
 
 
 router = APIRouter(prefix='/analyze', tags=['analyze'])

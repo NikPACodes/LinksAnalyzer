@@ -1,6 +1,6 @@
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.models import AnalysisTask, AnalysisTaskStatus
+from app.analyzer.models import AnalysisTask, AnalysisTaskStatus
 
 
 class TaskRepository:

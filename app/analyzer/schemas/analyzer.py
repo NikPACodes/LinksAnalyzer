@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, HttpUrl
 from uuid import UUID
-from app.db.models import AnalysisTaskStatus
+from app.analyzer.models import AnalysisTaskStatus
 
 
 class AnalyzeRequest(BaseModel):

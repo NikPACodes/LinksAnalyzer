@@ -1,7 +1,7 @@
 from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.models import WebsiteResult
+from app.analyzer.models import WebsiteResult
 
 
 class WebsiteResultRepository:

@@ -1,8 +1,8 @@
 from pydantic import HttpUrl
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.models import AnalysisTask
-from app.repositories.task_repository import TaskRepository
-from app.repositories.result_repository import WebsiteResultRepository
+from app.analyzer.models import AnalysisTask
+from app.analyzer.repositories.task_repository import TaskRepository
+from app.analyzer.repositories.result_repository import WebsiteResultRepository
 
 
 class AnalyzerService:

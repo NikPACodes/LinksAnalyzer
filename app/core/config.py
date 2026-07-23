@@ -5,16 +5,24 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_name: str = 'links-analyzer'
     app_env: str = 'local'
-    app_debug: bool = True
+    app_debug: bool = False
 
+    # Postgres
     postgres_host: str = 'postgres'
     postgres_port: int = 5432
     postgres_db: str = 'links_analyzer_db'
     postgres_user: str = 'links_analyzer'
     postgres_password: str = 'links_analyzer'
 
+    # Redis
     redis_host: str = 'redis'
     redis_port: int = 6379
+
+    # Настройки HTTP
+    fetch_timeout_seconds: int = 10                     # Время загрузки одного URL (aiohttp)
+    fetch_concurrency : int = 10                        # Количество параллельных запросов (asyncio)
+    fetch_max_response_size_bytes : int = 2000000       # Максимальный размер загружаемого ответа
+    fetch_user_agent: str = 'LinkWebsiteAnalyzer/0.1'   # Значение HTTP-заголовка User-Agent
 
     @property
     def database_url(self):
