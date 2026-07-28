@@ -2,6 +2,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.analyzer.models import WebsiteResult
+from app.analyzer.dto import FetchResult
 
 
 class WebsiteResultRepository:
@@ -34,3 +35,25 @@ class WebsiteResultRepository:
                                         .where(WebsiteResult.task_id == task_id)
                                         .order_by(WebsiteResult.created_at.asc()))
         return list(results.scalars().all())
+
+
+    async def update_fetch_result(self, task_id: UUID, fetch_result: FetchResult) -> WebsiteResult|None:
+        """
+        Обновление результата анализа URL данными HTTP-запроса.
+        """
+        result = await self.db.execute(select(WebsiteResult)
+                                       .where(WebsiteResult.task_id == task_id,
+                                              WebsiteResult.url == fetch_result.url))
+        # Для пары task_id + URL должна быть лишь одна записи.
+        website_result = result.scalar_one_or_none()
+
+        if website_result is None:
+            return None
+
+        website_result.status_code = fetch_result.status_code
+        website_result.response_time_ms = fetch_result.response_time_ms
+        website_result.html_size_bytes = fetch_result.html_size_bytes
+        website_result.error = fetch_result.error
+
+        await self.db.flush()
+        return website_result

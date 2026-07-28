@@ -2,13 +2,17 @@ from datetime import datetime
 from enum import StrEnum
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text, func
+from sqlalchemy import (CheckConstraint, Index, UniqueConstraint,
+                        Boolean, DateTime, Integer, String, Text, ForeignKey, func)
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
 class AnalysisTaskStatus(StrEnum):
+    """
+    Перечень статусов задачи
+    """
     PENDING = 'pending'
     PROCESSING = 'processing'
     DONE = 'done'
@@ -53,7 +57,7 @@ class WebsiteResult(Base):
     """
     __tablename__ = 'website_result'
     __table_args__ = (
-        Index('idx_result_task_id_url', 'task_id', 'url'),
+        UniqueConstraint('task_id', 'url', name='uniq_task_id_url'),
     )
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
