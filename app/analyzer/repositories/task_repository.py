@@ -1,4 +1,3 @@
-from unittest import result
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.analyzer.models import AnalysisTask, AnalysisTaskStatus
@@ -25,14 +24,15 @@ class TaskRepository:
         return task
 
 
-    async def get_task(self, task_id: UUID) -> AnalysisTask|None:
+    async def get_task(self, *, task_id: UUID) -> AnalysisTask|None:
         """
         Получение задачи по UUID.
         """
         return await self.db.get(AnalysisTask, task_id)
 
 
-    async def set_status(self, task: AnalysisTask, status: AnalysisTaskStatus, error: str|None = None) -> AnalysisTask:
+    async def set_status(self, task: AnalysisTask,
+                            *, status: AnalysisTaskStatus, error: str|None = None) -> AnalysisTask:
         """
         Установка статуса задачи и обновление информацию об ошибке.
         """
@@ -49,7 +49,8 @@ class TaskRepository:
         return task
 
 
-    async def set_processed_urls(self, task: AnalysisTask, processed_urls: int) -> AnalysisTask:
+    async def set_processed_urls(self, task: AnalysisTask,
+                                    *, processed_urls: int) -> AnalysisTask:
         """
         Установка количества обработанных URL.
         """

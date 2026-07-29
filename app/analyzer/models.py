@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import StrEnum
 from uuid import UUID, uuid4
 
-from sqlalchemy import (CheckConstraint, Index, UniqueConstraint,
+from sqlalchemy import (CheckConstraint, UniqueConstraint,
                         Boolean, DateTime, Integer, String, Text, ForeignKey, func)
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship

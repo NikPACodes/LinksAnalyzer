@@ -8,13 +8,14 @@ from app.analyzer.schemas.task import TaskResponse, WebsiteResultResponse
 
 router = APIRouter(prefix='/tasks', tags=['tasks'])
 
+
 @router.get('/{task_id}', response_model=TaskResponse)
-async def get_task(task_id: UUID, db: AsyncSession = Depends(get_db)) -> TaskResponse:
+async def get_task_info(task_id: UUID, db: AsyncSession = Depends(get_db)) -> TaskResponse:
     """
     Получение информации о задаче анализа по UUID.
     """
     task_repository = TaskRepository(db)
-    task = await task_repository.get_task(task_id)
+    task = await task_repository.get_task(task_id=task_id)
 
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -33,7 +34,7 @@ async def get_task_results(task_id: UUID, db: AsyncSession = Depends(get_db)) ->
     task_repository = TaskRepository(db)
     result_repository = WebsiteResultRepository(db)
 
-    task = await task_repository.get_task(task_id)
+    task = await task_repository.get_task(task_id=task_id)
 
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

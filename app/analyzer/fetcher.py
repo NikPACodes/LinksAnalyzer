@@ -1,12 +1,13 @@
 import asyncio
 import time
 import aiohttp
+from collections.abc import AsyncIterator
 from app.analyzer.dto import FetchResult
 
 
 class WebsiteFetcher:
     """
-    Асинхронная загрузка HTML-страницы по списку URL.
+    Асинхронная загрузка HTML-страниц по списку URL.
 
     Для всех запросов используется одна aiohttp.ClientSession.
     Количество одновременных запросов ограничивается через asyncio.Semaphore.
@@ -18,8 +19,8 @@ class WebsiteFetcher:
             self.max_response_size_bytes = max_response_size_bytes  # Максимальный размер загружаемого ответа
             self.user_agent = user_agent                            # Значение HTTP-заголовка User-Agent
             self.supported_content_types = {                        # Поддерживаемые типы ответа
-                'text/html,'
-                'application/xhtml+xml,'
+                'text/html',
+                'application/xhtml+xml',
             }
 
 
@@ -60,7 +61,10 @@ class WebsiteFetcher:
                             error=f'Response превышает максимально допустимый размер',
                         )
 
-                    content_type = response.headers.get('Content-Type', '')
+                    # aiohttp возвращает MIME-тип без параметров:
+                    # "text/html; charset=utf-8" → "text/html"
+                    content_type = response.content_type.lower()
+
                     # Проверка типа
                     if content_type.lower() not in self.supported_content_types:
                         return FetchResult(
@@ -119,7 +123,10 @@ class WebsiteFetcher:
 
     async def fetch_many(self, urls: list[str]) -> list[FetchResult]:
         """
-        Конкурентно загружает страницы по переданному списку URL.
+        Конкурентная загрузка страниц по переданному списку URL.
+        Возвращает результаты после завершения всех запросов.
+
+        ! Порядок FetchResult соответствует порядку URLs.
         """
         # Ограничение времени операции
         timeout = aiohttp.ClientTimeout(total=self.timeout_seconds)
@@ -140,3 +147,36 @@ class WebsiteFetcher:
             tasks = [self._fetch_one(session=session, semaphore=semaphore, url=url) for url in urls]
 
             return await asyncio.gather(*tasks)
+
+
+    async def fetch_many_iter(self, urls: list[str]) -> AsyncIterator[FetchResult]:
+        """
+        Конкурентная загрузка страниц по переданному списку URL.
+        Возвращает результат сразу после завершения каждого запроса.
+
+        ! Порядок FetchResult НЕ соответствует порядку URLs.
+
+        Отличие от fetch_many:
+            fetch_many() ждет завершения всех URL и возвращает list[FetchResult].
+            fetch_many_iter() отдает FetchResult по одному, по мере готовности.
+        """
+        # Ограничение времени операции
+        timeout = aiohttp.ClientTimeout(total=self.timeout_seconds)
+        # Ограничение конкурентных запросов
+        semaphore = asyncio.Semaphore(self.concurrency)
+
+        headers = {
+            'User-Agent': self.user_agent,
+            'Accept': (
+                'text/html,'
+                'application/xhtml+xml;q=0.9,'
+            ),
+        }
+
+        # Выполняем все запросы в рамках одной HTTP-сессии
+        async with aiohttp.ClientSession(timeout=timeout, headers=headers,
+                                             raise_for_status=False) as session:
+            tasks = [self._fetch_one(session=session, semaphore=semaphore, url=url) for url in urls]
+
+            for completed_task in asyncio.as_completed(tasks):
+                yield await completed_task

@@ -37,6 +37,16 @@ class WebsiteResultRepository:
         return list(results.scalars().all())
 
 
+    async def get_urls(self, task_id: UUID) -> list[str]:
+        """
+        Получение URLs по конкретной задаче.
+        """
+        results = await self.db.execute(select(WebsiteResult.url)
+                                        .where(WebsiteResult.task_id == task_id)
+                                        .order_by(WebsiteResult.created_at.asc()))
+        return list(results.scalars().all())
+
+
     async def update_fetch_result(self, task_id: UUID, fetch_result: FetchResult) -> WebsiteResult|None:
         """
         Обновление результата анализа URL данными HTTP-запроса.
