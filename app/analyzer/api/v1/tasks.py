@@ -1,12 +1,41 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.analyzer.repositories.result_repository import WebsiteResultRepository
 from app.analyzer.repositories.task_repository import TaskRepository
-from app.analyzer.schemas.task import TaskResponse, WebsiteResultResponse
+from app.analyzer.schemas.task import TaskResponse, TasksListResponse, WebsiteResultResponse
+from app.analyzer.models import AnalysisTaskStatus
 
 router = APIRouter(prefix='/tasks', tags=['tasks'])
+
+
+@router.get('', response_model=TasksListResponse)
+async def get_tasks_list(status: Annotated[list[AnalysisTaskStatus]|None,
+                                            Query(alias="status",
+                                                  description="Фильтр по статусам задачи.")] = None,
+                         limit: int = 20, offset: int = 0,
+                         db: AsyncSession = Depends(get_db)) -> TasksListResponse:
+    """
+    Получение списка задач анализа.
+    """
+    task_repository = TaskRepository(db)
+    # Получаем страницу задач и общее количество записей.
+    tasks, total = await task_repository.get_tasks(status_list=status, limit=limit, offset=offset)
+
+    items = [TaskResponse(
+                task_id=task.id,
+                status=task.status,
+                total_urls=task.total_urls,
+                processed_urls=task.processed_urls,
+                error=task.error,
+                created_at=task.created_at,
+                updated_at=task.updated_at,
+            ) for task in tasks]
+
+    return TasksListResponse(items=items, total=total,
+                             limit=limit, offset=offset)
 
 
 @router.get('/{task_id}', response_model=TaskResponse)

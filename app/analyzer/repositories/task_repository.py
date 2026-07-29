@@ -1,4 +1,5 @@
 from uuid import UUID
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.analyzer.models import AnalysisTask, AnalysisTaskStatus
 
@@ -22,6 +23,42 @@ class TaskRepository:
         await self.db.flush()
 
         return task
+
+
+    async def get_tasks(self, status_list: list[AnalysisTaskStatus]|None = None,
+                              limit: int = 20, offset: int = 0) -> tuple[list[AnalysisTask], int]:
+        """
+        Получение перечня задач анализа с учетом фильтрации, пагинации и общего количества.
+        """
+        if status_list:
+            items_sel = (select(AnalysisTask)
+                         .where(AnalysisTask.status.in_([status.value for status in status_list]))
+                         .order_by(AnalysisTask.created_at.desc())
+                         .limit(limit)
+                         .offset(offset))
+
+            total_sel = (select(func.count())
+                                .select_from(AnalysisTask)
+                                .where(AnalysisTask.status.in_([status.value for status in status_list])))
+
+        else:
+            items_sel = (select(AnalysisTask)
+                         .order_by(AnalysisTask.created_at.desc())
+                         .limit(limit)
+                         .offset(offset))
+
+            total_sel = (select(func.count())
+                                .select_from(AnalysisTask))
+
+        # Запрос для получения задач
+        items_result = await self.db.execute(items_sel)
+        items = list(items_result.scalars().all())
+
+        # Запрос для подсчета количества задач
+        total_result = await self.db.execute(total_sel)
+        total = total_result.scalar_one()
+
+        return items, total
 
 
     async def get_task(self, *, task_id: UUID) -> AnalysisTask|None:
