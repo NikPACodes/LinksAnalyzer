@@ -1,12 +1,14 @@
-from pydantic import HttpUrl
-from uuid import UUID
 import time
+from uuid import UUID
+
+from pydantic import HttpUrl
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.analyzer.models import AnalysisTask
-from app.analyzer.repositories.task_repository import TaskRepository, AnalysisTaskStatus
-from app.analyzer.repositories.result_repository import WebsiteResultRepository
+
 from app.analyzer.fetcher import WebsiteFetcher
+from app.analyzer.models import AnalysisTask
 from app.analyzer.parser import HtmlParser
+from app.analyzer.repositories.result_repository import WebsiteResultRepository
+from app.analyzer.repositories.task_repository import AnalysisTaskStatus, TaskRepository
 from app.core.config import get_settings
 
 

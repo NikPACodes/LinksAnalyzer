@@ -1,7 +1,8 @@
 from fastapi import FastAPI
+
 from app.analyzer.api.v1.router import api_router as api_v1_router
-from app.ops.api.router import ops_router
 from app.core.config import get_settings
+from app.ops.api.router import ops_router
 
 settings = get_settings()
 

@@ -1,5 +1,7 @@
-from pydantic import BaseModel, Field, HttpUrl
 from uuid import UUID
+
+from pydantic import BaseModel, Field, HttpUrl
+
 from app.analyzer.models import AnalysisTaskStatus
 
 

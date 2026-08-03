@@ -1,12 +1,14 @@
-from uuid import UUID
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.session import get_db
+
+from app.analyzer.models import AnalysisTaskStatus
 from app.analyzer.repositories.result_repository import WebsiteResultRepository
 from app.analyzer.repositories.task_repository import TaskRepository
 from app.analyzer.schemas.task import TaskResponse, TasksListResponse, WebsiteResultResponse
-from app.analyzer.models import AnalysisTaskStatus
+from app.db.session import get_db
 
 router = APIRouter(prefix='/tasks', tags=['tasks'])
 

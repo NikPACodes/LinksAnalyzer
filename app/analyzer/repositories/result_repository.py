@@ -1,8 +1,10 @@
 from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.analyzer.models import WebsiteResult
+
 from app.analyzer.dto import FetchResult, HtmlParseResult
+from app.analyzer.models import WebsiteResult
 
 
 class WebsiteResultRepository:

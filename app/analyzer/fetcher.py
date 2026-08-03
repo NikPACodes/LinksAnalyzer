@@ -1,7 +1,9 @@
 import asyncio
 import time
-import aiohttp
 from collections.abc import AsyncIterator
+
+import aiohttp
+
 from app.analyzer.dto import FetchResult
 
 
@@ -58,7 +60,7 @@ class WebsiteFetcher:
                             response_time_ms=response_time,
                             html=None,
                             html_size_bytes=len(body),
-                            error=f'Response превышает максимально допустимый размер',
+                            error='Response превышает максимально допустимый размер',
                         )
 
                     # aiohttp возвращает MIME-тип без параметров:

@@ -1,7 +1,10 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+
 from bs4 import BeautifulSoup
+
 from app.analyzer.dto import FetchResult, HtmlParseResult
+
 
 class HtmlParser:
     """

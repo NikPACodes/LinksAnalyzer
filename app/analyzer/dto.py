@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
+
 class FetchResult(BaseModel):
     """
     Результат загрузки URL.
