@@ -175,7 +175,7 @@ class WebsiteFetcher:
 
         # Выполняем все запросы в рамках одной HTTP-сессии
         async with aiohttp.ClientSession(timeout=timeout, headers=headers,
-                                             raise_for_status=False) as session:
+                                         raise_for_status=False) as session:
             tasks = [self._fetch_one(session=session, semaphore=semaphore, url=url) for url in urls]
 
             for completed_task in asyncio.as_completed(tasks):

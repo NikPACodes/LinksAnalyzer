@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     fetch_max_response_size_bytes : int = 2000000       # Максимальный размер загружаемого ответа
     fetch_user_agent: str = 'LinkWebsiteAnalyzer/0.1'   # Значение HTTP-заголовка User-Agent
 
+    # Настройки парсера
+    html_parser_max_workers: int = 4                    # Максимальное количество параллельных потоков (workers)
+    html_parser_max_title_length: int = 512             # Максимальная длина Title страницы, для БД
+    html_parser_max_description_length: int = 2000      # Максимальная длина Description страницы, для БД
+
     @property
     def database_url(self):
         """

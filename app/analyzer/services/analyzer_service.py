@@ -6,6 +6,7 @@ from app.analyzer.models import AnalysisTask
 from app.analyzer.repositories.task_repository import TaskRepository, AnalysisTaskStatus
 from app.analyzer.repositories.result_repository import WebsiteResultRepository
 from app.analyzer.fetcher import WebsiteFetcher
+from app.analyzer.parser import HtmlParser
 from app.core.config import get_settings
 
 
@@ -70,7 +71,8 @@ class AnalyzerService:
 
     async def fetch_task_urls(self,task_id: UUID) -> AnalysisTask | None:
         """
-        Выполнение асинхронной загрузки всех URL, связанных с задачей.
+        Выполнение асинхронной загрузки всех URL, связанных с задачей,
+        и выполняем парсинг полученных HTML-страниц.
         """
         task = await self.task_repository.get_task(task_id=task_id)
 
@@ -81,12 +83,15 @@ class AnalyzerService:
         urls = await self.result_repository.get_urls(task_id)
 
         # Создаем aiohttp загрузчик
-        fetcher = WebsiteFetcher(
-            timeout_seconds=self.settings.fetch_timeout_seconds,
-            concurrency=self.settings.fetch_concurrency,
-            max_response_size_bytes=self.settings.fetch_max_response_size_bytes,
-            user_agent=self.settings.fetch_user_agent,
-        )
+        fetcher = WebsiteFetcher(timeout_seconds=self.settings.fetch_timeout_seconds,
+                                 concurrency=self.settings.fetch_concurrency,
+                                 max_response_size_bytes=self.settings.fetch_max_response_size_bytes,
+                                 user_agent=self.settings.fetch_user_agent)
+
+        # Создаем HTML парсер
+        parser = HtmlParser(max_workers=self.settings.html_parser_max_workers,
+                            max_title_length=self.settings.html_parser_max_title_length,
+                            max_description_length=self.settings.html_parser_max_description_length)
 
         try:
             await self.task_repository.set_status(task, status=AnalysisTaskStatus.PROCESSING)
@@ -113,7 +118,15 @@ class AnalyzerService:
             # Для уменьшения нагрузки на БД коммиты делаются с интерваломи (commit_interval_seconds),
             # либо по достижению N результатов (commit_every).
             async for fetch_result in fetcher.fetch_many_iter(urls):
-                await self.result_repository.update_fetch_result(task_id=task.id, fetch_result=fetch_result)
+                # Запускаем парсинг
+                # TODO переделать на настоящую многопоточность (pipeline)
+                # Парсинг запускается в отдельном потоке чтобы не блокировать event loop,
+                # но из-за await ожидает завершения -> получаем лишь 1 активую parse-задачу внутри цикла
+                parse_result = await parser.parse(fetch_result)
+
+                await self.result_repository.update_fetch_result(task_id=task.id,
+                                                                 fetch_result=fetch_result,
+                                                                 parse_result=parse_result)
                 processed_urls += 1
                 await self.task_repository.set_processed_urls(task, processed_urls=processed_urls)
 
@@ -141,3 +154,6 @@ class AnalyzerService:
             await self.db.refresh(task)
 
             return task
+
+        finally:
+            parser.shutdown()

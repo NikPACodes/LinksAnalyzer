@@ -12,3 +12,15 @@ class FetchResult(BaseModel):
     html: str | None
     html_size_bytes: int
     error: str | None
+
+
+class HtmlParseResult(BaseModel):
+    """
+    Результат парсинга HTML-страницы.
+    """
+    model_config = ConfigDict(frozen=True)
+
+    title: str | None
+    description: str | None
+    links_count: int
+    images_count: int

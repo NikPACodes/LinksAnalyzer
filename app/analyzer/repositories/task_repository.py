@@ -25,8 +25,8 @@ class TaskRepository:
         return task
 
 
-    async def get_tasks(self, status_list: list[AnalysisTaskStatus]|None = None,
-                              limit: int = 20, offset: int = 0) -> tuple[list[AnalysisTask], int]:
+    async def get_tasks(self, *, status_list: list[AnalysisTaskStatus]|None = None,
+                                 limit: int = 20, offset: int = 0) -> tuple[list[AnalysisTask], int]:
         """
         Получение перечня задач анализа с учетом фильтрации, пагинации и общего количества.
         """
