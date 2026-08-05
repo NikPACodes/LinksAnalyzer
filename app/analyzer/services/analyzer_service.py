@@ -81,6 +81,10 @@ class AnalyzerService:
         if task is None:
             return None
 
+        # Страховка от двойного запуска
+        if task.status in {AnalysisTaskStatus.PROCESSING, AnalysisTaskStatus.DONE}:
+            return task
+
         # Получение перечня URLs по задаче
         urls = await self.result_repository.get_urls(task_id)
 
