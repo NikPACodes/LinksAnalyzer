@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.analyzer.dto import FetchResult, HtmlParseResult
+from app.analyzer.dto import CachedAnalysisResult, FetchResult, HtmlParseResult
 from app.analyzer.models import WebsiteResult
 
 
@@ -68,12 +68,41 @@ class WebsiteResultRepository:
         website_result.response_time_ms = fetch_result.response_time_ms
         website_result.html_size_bytes = fetch_result.html_size_bytes
         website_result.error = fetch_result.error
+        website_result.cached = False
 
         if parse_result is not None:
             website_result.title = parse_result.title
             website_result.description = parse_result.description
             website_result.links_count = parse_result.links_count
             website_result.images_count = parse_result.images_count
+
+        await self.db.flush()
+        return website_result
+
+
+    async def update_from_cache(self, *, task_id: UUID,
+                                         cached_result: CachedAnalysisResult) -> WebsiteResult | None:
+        """
+        Обновление результата анализа данными из кэша.
+        """
+        query_result = await self.db.execute(select(WebsiteResult)
+                                             .where(WebsiteResult.task_id == task_id,
+                                                    WebsiteResult.url == cached_result.url))
+
+        website_result = query_result.scalar_one_or_none()
+
+        if website_result is None:
+            return None
+
+        website_result.status_code = cached_result.status_code
+        website_result.response_time_ms = cached_result.response_time_ms
+        website_result.title = cached_result.title
+        website_result.description = cached_result.description
+        website_result.links_count = cached_result.links_count
+        website_result.images_count = cached_result.images_count
+        website_result.html_size_bytes = cached_result.html_size_bytes
+        website_result.error = cached_result.error
+        website_result.cached = True
 
         await self.db.flush()
         return website_result

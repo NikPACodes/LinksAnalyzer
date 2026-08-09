@@ -25,3 +25,20 @@ class HtmlParseResult(BaseModel):
     description: str | None
     links_count: int
     images_count: int
+
+
+class CachedAnalysisResult(BaseModel):
+    """
+    Результат анализа URL для кэширования
+    """
+    model_config = ConfigDict(frozen=True)
+
+    url: str
+    status_code: int | None
+    response_time_ms: int | None
+    title: str | None
+    description: str | None
+    links_count: int
+    images_count: int
+    html_size_bytes: int
+    error: str | None

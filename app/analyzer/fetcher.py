@@ -162,6 +162,9 @@ class WebsiteFetcher:
             fetch_many() ждет завершения всех URL и возвращает list[FetchResult].
             fetch_many_iter() отдает FetchResult по одному, по мере готовности.
         """
+        if not urls:
+            return
+
         # Ограничение времени операции
         timeout = aiohttp.ClientTimeout(total=self.timeout_seconds)
         # Ограничение конкурентных запросов
