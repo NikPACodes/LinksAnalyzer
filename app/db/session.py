@@ -17,5 +17,9 @@ AsyncSessionLocal = async_sessionmaker(bind=engine,            # Подключ�
                                        autoflush=False)
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """
+    Создание и получение асинхронной сессии БД,
+    с автоматическим закрытием после использования.
+    """
     async with AsyncSessionLocal() as session:
         yield session

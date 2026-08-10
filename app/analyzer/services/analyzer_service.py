@@ -101,7 +101,7 @@ class AnalyzerService:
             raise
 
 
-    async def fetch_task_urls(self,task_id: UUID) -> AnalysisTask | None:
+    async def fetch_task_urls(self, task_id: UUID, *, use_cache: bool = True) -> AnalysisTask | None:
         """
         Выполнение асинхронной загрузки всех URL, связанных с задачей,
         и выполняем парсинг полученных HTML-страниц.
@@ -158,6 +158,10 @@ class AnalyzerService:
             # Проверяем кэш и получаем результаты анализа URLs из кэша
             # -------------------------------------------------------------------
             for url in urls:
+                if not use_cache:
+                    urls_to_fetch.append(url)
+                    continue
+
                 cached_result = await cache.get(url)
 
                 if cached_result is None:
