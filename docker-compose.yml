@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: dev
     container_name: links_analyzer_app
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     env_file:
@@ -23,6 +24,7 @@ services:
       build:
         context: .
         dockerfile: Dockerfile
+        target: dev
       container_name: links_analyzer_worker
       command: celery -A app.worker.celery_app:celery_app worker --loglevel=info --queues=analyzer
       env_file:
