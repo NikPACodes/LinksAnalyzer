@@ -10,6 +10,7 @@ celery_app = Celery('links_analyzer',
                     backend=settings.celery_result_backend_url, # Redis-хранилище для статусов и результатов Celery-задач
                     include=[
                         'app.analyzer.celery_tasks',
+                        'app.worker.celery_tasks',
                     ],
                     )
 
