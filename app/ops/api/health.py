@@ -7,7 +7,7 @@ from app.core.config import Settings, get_settings
 from app.db.session import get_db
 from app.ops.health_checks import check_postgres, check_redis, check_celery
 
-router = APIRouter(prefix='/health', tags=['health'])
+router = APIRouter(prefix='/health', tags=['ops-health'])
 
 @router.get('')
 async def health_check(settings: Settings = Depends(get_settings)) -> dict[str, str]:

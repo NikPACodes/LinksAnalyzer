@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-from app.analyzer.models import AnalysisTaskStatus
+from app.analyzer.models import AnalysisTask, AnalysisTaskStatus
 
 
 class TaskResponse(BaseModel):
@@ -16,9 +18,24 @@ class TaskResponse(BaseModel):
     status: AnalysisTaskStatus = Field(description='Статус задачи')
     total_urls: int = Field(ge=0, description='Количество URLs в задаче')
     processed_urls: int = Field(ge=0, description='Количество уже обработанных URL')
-    error: str|None = Field(default=None, description='Общая ошибка задачи')
+    progress_percent: int = Field(ge=0, le=100, description='Процент выполнения задачи')
+    error: str | None = Field(default=None, description='Общая ошибка задачи')
     created_at: datetime = Field(description='Создания задачи')
     updated_at: datetime = Field(description='Последнее обновление')
+
+    @classmethod
+    def build(cls, task: AnalysisTask) -> TaskResponse:
+        """
+        Helper для сборки ответа на основе AnalysisTask.
+        """
+        progress_percent = 0
+
+        if task.total_urls > 0:
+            progress_percent = min(100, int(task.processed_urls / task.total_urls * 100))
+
+        return cls(task_id=task.id, status=task.status,
+                   total_urls=task.total_urls, processed_urls=task.processed_urls, progress_percent=progress_percent,
+                   error=task.error, created_at=task.created_at, updated_at=task.updated_at)
 
 
 class TasksListResponse(BaseModel):

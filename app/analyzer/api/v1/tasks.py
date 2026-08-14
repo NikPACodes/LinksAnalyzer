@@ -17,7 +17,8 @@ router = APIRouter(prefix='/tasks', tags=['tasks'])
 async def get_tasks_list(status: Annotated[list[AnalysisTaskStatus]|None,
                                             Query(alias="status",
                                                   description="Фильтр по статусам задачи.")] = None,
-                         limit: int = 20, offset: int = 0,
+                         limit: Annotated[int, Query(ge=1, le=100)] = 20,
+                         offset: Annotated[int, Query(ge=0)] = 0,
                          db: AsyncSession = Depends(get_db)) -> TasksListResponse:
     """
     Получение списка задач анализа.
@@ -26,15 +27,7 @@ async def get_tasks_list(status: Annotated[list[AnalysisTaskStatus]|None,
     # Получаем страницу задач и общее количество записей.
     tasks, total = await task_repository.get_tasks(status_list=status, limit=limit, offset=offset)
 
-    items = [TaskResponse(
-                task_id=task.id,
-                status=task.status,
-                total_urls=task.total_urls,
-                processed_urls=task.processed_urls,
-                error=task.error,
-                created_at=task.created_at,
-                updated_at=task.updated_at,
-            ) for task in tasks]
+    items = [TaskResponse.build(task) for task in tasks]
 
     return TasksListResponse(items=items, total=total,
                              limit=limit, offset=offset)
@@ -52,9 +45,7 @@ async def get_task_info(task_id: UUID, db: AsyncSession = Depends(get_db)) -> Ta
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail='Задача не найдена')
 
-    return TaskResponse(task_id=task.id, status=task.status,
-                        total_urls=task.total_urls, processed_urls=task.processed_urls, error=task.error,
-                        created_at=task.created_at, updated_at=task.updated_at)
+    return TaskResponse.build(task)
 
 
 @router.get('/{task_id}/results', response_model=list[WebsiteResultResponse])

@@ -7,7 +7,7 @@ from app.analyzer.schemas.task import TaskResponse
 from app.analyzer.services.analyzer_service import AnalyzerService
 from app.db.session import get_db
 
-router = APIRouter(prefix='/tasks', tags=['tasks'])
+router = APIRouter(prefix='/tasks', tags=['ops-tasks'])
 
 @router.post('/{task_id}/fetch', response_model=TaskResponse)
 async def post_fetch_task_urls(task_id: UUID, db: AsyncSession = Depends(get_db)) -> TaskResponse:
@@ -21,6 +21,4 @@ async def post_fetch_task_urls(task_id: UUID, db: AsyncSession = Depends(get_db)
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Задача не найдена.")
 
-    return TaskResponse(task_id=task.id, status=task.status,
-                        total_urls=task.total_urls, processed_urls=task.processed_urls, error=task.error,
-                        created_at=task.created_at, updated_at=task.updated_at)
+    return TaskResponse.build(task)
