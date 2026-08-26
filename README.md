@@ -1,7 +1,7 @@
-# 🔎 LinksAnalyzer — асинхронный анализатор веб-страниц на FastAPI
+# 🔎 LinksAnalyzer — асинхронный анализатор веб-страниц и HTTP endpoints на FastAPI
 
 ## 📋 Краткое описание
-__LinksAnalyzer__ — backend-сервис для асинхронного анализа веб-страниц на `FastAPI` 
+__LinksAnalyzer__ — backend-сервис для асинхронного анализа веб-страниц и HTTP endpoints на `FastAPI` 
 с использованием `aiohttp`, `Celery`, `Redis`, `PostgreSQL` и `SQLAlchemy Async`.
 
 Сервис предназначен для:
@@ -208,7 +208,7 @@ app/
 ### 1. Клонировать репозиторий
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/NikPACodes/LinksAnalyzer.git
 cd LinksAnalyzer
 ```
 
@@ -269,7 +269,7 @@ POST /api/ops/tasks/{task_id}/fetch
 
 ## 🚧 Ограничения
 
-Текущая версия является MVP и не претендует на полноценный crawler или monitoring platform.
+Текущая версия является MVP и не претендует на полноценный crawler или платформу мониторинга.
 
 Текущие ограничения:
 - нет авторизации;
@@ -296,10 +296,10 @@ POST /api/ops/tasks/{task_id}/fetch
 [API](./docs/API.md) ── Описание public и ops endpoints, примеры запросов и ответов.
 
 ### 🛠 Roadmap
-[ROADMAP](./docs/ROADMAP.md) ── Roadmap реализации проекта
+[ROADMAP](./docs/ROADMAP.md) ── Roadmap реализации проекта.
 
 ### 🧾 ADR
-`docs/adr/` ── Архитектурные решения проекта.
+[ADR](./docs/ADR) ── Архитектурные решения проекта.
 
 ### 📄 Лицензия
 [LICENSE](./LICENSE) ── Условия использования и распространения проекта.
@@ -310,7 +310,7 @@ POST /api/ops/tasks/{task_id}/fetch
 
 Планируемые направления:
 - автоматические тесты;
-- retry/backoff для временных сетевых ошибок;
+- retry / backoff для временных сетевых ошибок;
 - Celery Beat для периодических проверок;
 - построение дерева сайта;
 - анализ внутренних и внешних ссылок;
