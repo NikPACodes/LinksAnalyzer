@@ -93,6 +93,10 @@ Celery ───┘
 ```
 Каждый runtime создает собственную `AsyncSession`, но использует общий `Service` и `Repository layers`.
 
+- [ADR-003](./ADR-003-async-db.md) — общие правила асинхронной работы с БД.
+- [ADR-007](./ADR-007-celery-background-processing.md) — причины выноса анализа в Celery.
+- [ADR-010](./ADR-010-service-transactions.md) — управление транзакциями в сервисе независимо от lifecycle session.
+
 ---
 
 

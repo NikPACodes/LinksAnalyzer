@@ -87,9 +87,13 @@ Redis instance
 └── DB 2 -> Analysis Cache
 ```
 
-`DB infrastructure` `Celery worker` отделена от FastAPI и описана в [ADR-006](./ADR-006-celery-db-session.md).
-
 В дальнейшем `Celery` также может использоваться для периодичных задач через `Celery Beat`.
+
+- [ADR-002](./ADR-002-ops-api.md) — назначение OPS как служебной точки входа.
+- [ADR-006](./ADR-006-celery-db-session.md) — изоляция инфраструктуры БД Celery worker от FastAPI.
+- [ADR-008](./ADR-008-redis-cache.md) — использование Redis для кэша анализа.
+- [ADR-009](./ADR-009-incremental-progress.md) — сохранение прогресса фоновой задачи.
+- [ADR-010](./ADR-010-service-transactions.md) — управление транзакциями в `AnalyzerService`.
 
 ---
 

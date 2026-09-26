@@ -100,6 +100,10 @@ Redis instance
 
 Текущий `TTL` кэша задается через `application settings`.
 
+- [ADR-007](./ADR-007-celery-background-processing.md) — использование Redis для фоновых задач Celery.
+- [ADR-009](./ADR-009-incremental-progress.md) — учет результатов из кэша в прогрессе.
+- [ADR-010](./ADR-010-service-transactions.md) — границы транзакций PostgreSQL относительно операций Redis.
+
 ---
 
 

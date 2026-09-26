@@ -138,6 +138,12 @@ models/
 
 При этом каждый бизнес-модуль допускает собственную структуру.
 
+- [ADR-002](./ADR-002-ops-api.md) — выделение служебного модуля `ops`.
+- [ADR-003](./ADR-003-async-db.md) — асинхронная работа с БД и использование `AsyncSession`.
+- [ADR-006](./ADR-006-celery-db-session.md) — отдельная инфраструктура БД для Celery worker.
+- [ADR-007](./ADR-007-celery-background-processing.md) — назначение Celery worker и фоновое выполнение анализа.
+- [ADR-010](./ADR-010-service-transactions.md) — ответственность Service и Repository за управление транзакциями.
+
 ---
 
 

@@ -73,9 +73,9 @@ API -> Service -> Repository -> PostgreSQL
 
 ## Заметки
 
-Отдельное подключение к БД для `Celery worker` и причины его появления описываются в отдельном ADR.
-Управление `commit()` и `rollback()` на уровне `Service` позволяет `Repository` оставаться ответственным 
-только за операции доступа к данным.
+- [ADR-001](./ADR-001-project-structure.md) — размещение инфраструктуры БД и слоев приложения.
+- [ADR-006](./ADR-006-celery-db-session.md) — отдельное подключение к БД для Celery worker.
+- [ADR-010](./ADR-010-service-transactions.md) — управление `commit()` и `rollback()` на уровне Service.
 
 ---
 

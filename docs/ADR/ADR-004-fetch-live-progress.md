@@ -92,6 +92,9 @@ fetch_many_iter  -> результат готов -> сразу возвраща
 ```
 `fetch_many_iter()` был добавлен прежде всего для реализации live progress задачи.
 
+- [ADR-005](./ADR-005-html-parsing-threadpool.md) — обработка полученного HTML вне `event loop`.
+- [ADR-009](./ADR-009-incremental-progress.md) — сохранение результатов и прогресса для отображения через API.
+
 ---
 
 

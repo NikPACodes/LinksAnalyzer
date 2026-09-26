@@ -83,6 +83,7 @@ Cache HIT   или   Fetch -> Parse
 - [ADR-005](./ADR-005-html-parsing-threadpool.md) — парсинг перед сохранением результата.
 - [ADR-007](./ADR-007-celery-background-processing.md) — фоновое выполнение анализа и хранение состояния задачи независимо от Celery.
 - [ADR-008](./ADR-008-redis-cache.md) — получение готового результата из кэша.
+- [ADR-010](./ADR-010-service-transactions.md) — управление `commit()` и `rollback()` на уровне сервиса.
 
 ---
 

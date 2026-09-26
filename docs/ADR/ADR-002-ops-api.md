@@ -66,6 +66,10 @@ __OPS endpoints__ не должны дублировать бизнес-логи
 
 Префикс `/api/ops` является архитектурным разделением, а не механизмом безопасности.
 
+- [ADR-001](./ADR-001-project-structure.md) — место `ops` в структуре проекта.
+- [ADR-007](./ADR-007-celery-background-processing.md) — использование общего `AnalyzerService` из OPS и Celery.
+- [ADR-010](./ADR-010-service-transactions.md) — управление транзакциями внутри сервиса.
+
 ---
 
 

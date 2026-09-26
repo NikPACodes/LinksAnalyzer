@@ -82,6 +82,12 @@ fetch result -> await parser.parse(...) -> save result -> next fetch result
 - обновление `progress`;
 - сохранение результатов в PostgreSQL.
 
+Связанные документы:
+
+- [ADR-004](./ADR-004-fetch-live-progress.md) — получение результатов загрузки по мере готовности.
+- [ADR-009](./ADR-009-incremental-progress.md) — сохранение результатов и прогресса после обработки.
+- [ROADMAP.md](../ROADMAP.md) — план перехода к полноценному pipeline.
+
 ---
 
 
