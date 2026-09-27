@@ -45,7 +45,7 @@ URL  ->  Fetch  ->  Parse  ->  CachedAnalysisResult  ->  Redis
 ```text
 Cache lookup
  ├── HIT  -> сохранить cached result в результат задачи
- └── MISS -> Fetch -> Parse -> Cache -> сохранить результат
+ └── MISS -> Fetch -> Parse -> сохранить результат
                         │
                         └── если результат cacheable -> Cache
 ```
